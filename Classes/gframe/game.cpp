@@ -48,6 +48,9 @@ bool Game::Initialize() {
 	srand(time(0));
 	irr::SIrrlichtCreationParameters params = irr::SIrrlichtCreationParameters();
 
+    xScale = android::getXScale(app);
+    yScale = android::getYScale(app);
+
 #ifdef _IRR_ANDROID_PLATFORM_
 	android::InitOptions *options = android::getInitOptions(app);
 	glversion = options->getOpenglVersion();
@@ -60,7 +63,7 @@ bool Game::Initialize() {
 	params.Bits = 24;
 	params.ZBufferBits = 16;
 	params.AntiAlias  = 0;
-	params.WindowSize = irr::core::dimension2d<u32>(0, 0);
+	params.WindowSize = irr::core::dimension2d<u32>((int)(GAME_WIDTH * xScale), (int)(GAME_HEIGHT * yScale));
 #else
 	if(gameConf.use_d3d)
 		params.DriverType = irr::video::EDT_DIRECT3D9;
@@ -88,9 +91,6 @@ bool Game::Initialize() {
 //	logger->setLogLevel(ELL_WARNING);
 	isPSEnabled = options->isPendulumScaleEnabled();
 	dataManager.FileSystem = device->getFileSystem();
-
-	xScale = android::getXScale(app);
-	yScale = android::getYScale(app);
 
 	char log_scale[256] = {0};
 	sprintf(log_scale, "xScale = %f, yScale = %f", xScale, yScale);

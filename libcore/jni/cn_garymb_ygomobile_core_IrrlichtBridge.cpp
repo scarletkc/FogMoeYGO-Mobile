@@ -227,6 +227,46 @@ static void* join_game_thread(void* param) {
 	return NULL;
 }
 
+JNIEXPORT jboolean JNICALL Java_cn_garymb_ygomobile_core_IrrlichtBridge_nativeSendTouchEvent(
+        JNIEnv* env, jclass, jint handle, jint action, jint x, jint y, jint id) {
+    if(handle) {
+        IrrlichtDevice *device = (IrrlichtDevice *) handle;
+        SEvent event;
+        event.EventType = EET_TOUCH_INPUT_EVENT;
+        s32 eventAction = action;
+        s32 eventType = eventAction & AMOTION_EVENT_ACTION_MASK;
+
+        bool touchReceived = true;
+
+        switch (eventType) {
+            case AMOTION_EVENT_ACTION_DOWN:
+            case AMOTION_EVENT_ACTION_POINTER_DOWN:
+                event.TouchInput.Event = ETIE_PRESSED_DOWN;
+                break;
+            case AMOTION_EVENT_ACTION_MOVE:
+                event.TouchInput.Event = ETIE_MOVED;
+                break;
+            case AMOTION_EVENT_ACTION_UP:
+            case AMOTION_EVENT_ACTION_POINTER_UP:
+            case AMOTION_EVENT_ACTION_CANCEL:
+                event.TouchInput.Event = ETIE_LEFT_UP;
+                break;
+            default:
+                touchReceived = false;
+                break;
+        }
+
+        if (touchReceived) {
+            event.TouchInput.ID = static_cast<size_t>(id);
+            event.TouchInput.X = x;
+            event.TouchInput.Y = y;
+            device->postEventFromUser(event);
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
 /*
  * Class:     cn_garymb_ygomobile_core_IrrlichtBridge
  * Method:    nativeRefreshTexture

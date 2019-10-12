@@ -18,7 +18,9 @@ import android.os.PowerManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.HapticFeedbackConstants;
+import android.view.InputQueue;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -101,7 +103,8 @@ public class YGOMobileActivity extends NativeActivity implements
     private SurfaceView mSurfaceView;
     private boolean replaced = false;
     private static boolean USE_SURFACE = true;
-    private static boolean RESIZE_WINDOW = true;
+    private static boolean RESIZE_WINDOW = false;
+    private static boolean USE_VIEW_CLICK = true;
 
 //    public static int notchHeight;
 
@@ -271,6 +274,9 @@ public class YGOMobileActivity extends NativeActivity implements
 
     @Override
     public int getPositionX() {
+        if(USE_VIEW_CLICK){
+            return 0;
+        }
         synchronized (this) {
             return mPositionX;
         }
@@ -278,6 +284,9 @@ public class YGOMobileActivity extends NativeActivity implements
 
     @Override
     public int getPositionY() {
+        if(USE_VIEW_CLICK){
+            return 0;
+        }
         synchronized (this) {
             return mPositionY;
         }
@@ -311,6 +320,52 @@ public class YGOMobileActivity extends NativeActivity implements
             }
             super.setContentView(mLayout);
         }
+        if(USE_VIEW_CLICK){
+            getWindow().takeInputQueue(null);
+            view.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    int action = event.getAction();
+                    int eventType =  action & MotionEvent.ACTION_MASK;
+
+                    boolean touchReceived = true;
+                    switch (eventType)
+                    {
+                        case MotionEvent.ACTION_DOWN:
+                        case MotionEvent.ACTION_POINTER_DOWN:
+                        case MotionEvent.ACTION_MOVE:
+                        case MotionEvent.ACTION_UP:
+                        case MotionEvent.ACTION_POINTER_UP:
+                        case MotionEvent.ACTION_CANCEL:
+                            break;
+                        default:
+                            touchReceived = false;
+                            break;
+                    }
+                    if (!touchReceived) {
+                        return false;
+                    }
+                    IrrlichtBridge.sendTouchEvent(action, (int)event.getX(), (int)event.getY(), 0);
+                    return true;
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onInputQueueDestroyed(InputQueue queue) {
+        if(USE_VIEW_CLICK){
+            return;
+        }
+        super.onInputQueueDestroyed(queue);
+    }
+
+    @Override
+    public void onInputQueueCreated(InputQueue queue) {
+        if(USE_VIEW_CLICK){
+            return;
+        }
+        super.onInputQueueCreated(queue);
     }
 
     private void changeGameSize(){
@@ -329,9 +384,11 @@ public class YGOMobileActivity extends NativeActivity implements
                 update = true;
             }
         }
-        if (update) {
+        if(!USE_VIEW_CLICK) {
+            if (update) {
 //            Log.i("ygo", "Android command setInputFix2:posX=" + spX + ",posY=" + spY);
-            IrrlichtBridge.setInputFix(mPositionX, mPositionY);
+                IrrlichtBridge.setInputFix(mPositionX, mPositionY);
+            }
         }
         if(RESIZE_WINDOW) {
             if (app().isKeepScale()) {

@@ -61,8 +61,14 @@ public final class IrrlichtBridge {
 
     private static native void nativeSetInputFix(int handle, int x, int y);
 
+    private static native boolean nativeSendTouchEvent(int handle, int action, int x, int y, int id);
+
     private static final boolean DEBUG = false;
     private static final String TAG = IrrlichtBridge.class.getSimpleName();
+
+    public static boolean sendTouchEvent(int action, int x, int y, int id){
+        return nativeSendTouchEvent(sNativeHandle, action, x, y, id);
+    }
 
     public static Bitmap getBpgImage(InputStream inputStream, Bitmap.Config config) {
         ByteArrayOutputStream outputStream = null;
