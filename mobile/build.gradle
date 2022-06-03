@@ -5,12 +5,12 @@ android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     defaultConfig {
-        applicationId "cn.garymb.ygomobile"
+        applicationId "moe.fog.diy.ygomobile"
         minSdkVersion 21
         //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 29
         versionCode 390700430
-        versionName "3.9.7"
+        versionName "2.9.0"
         flavorDimensions "versionCode"
         vectorDrawables.useSupportLibrary = true
         ndk {
@@ -23,17 +23,17 @@ android {
     }
     productFlavors {
         cn {
-            buildConfigField 'String', 'URL_DONATE', '"https://afdian.net/@ygomobile"'
+            buildConfigField 'String', 'URL_DONATE', '"https://diy.fog.moe/"'
             manifestPlaceholders = [APP_ID: "0b6f110306"]
         }
         en {
             applicationIdSuffix ".EN"
-            buildConfigField 'String', 'URL_DONATE', '"https://www.patreon.com/ygomobile"'
+            buildConfigField 'String', 'URL_DONATE', '"https://diy.fog.moe/"'
             manifestPlaceholders = [APP_ID: "9c66525dfa"]
         }
         ko {
             applicationIdSuffix ".KO"
-            buildConfigField 'String', 'URL_DONATE', '"https://www.patreon.com/ygomobile"'
+            buildConfigField 'String', 'URL_DONATE', '"https://diy.fog.moe/"'
             manifestPlaceholders = [APP_ID: "0488398d8a"]
         }
     }
