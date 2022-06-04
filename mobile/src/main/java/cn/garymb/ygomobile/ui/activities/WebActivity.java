@@ -7,6 +7,7 @@ import static cn.garymb.ygomobile.utils.DownloadUtil.TYPE_DOWNLOAD_EXCEPTION;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 
 import java.io.File;
@@ -82,14 +84,14 @@ public class WebActivity extends BaseActivity {
                         DataManager.get().load(true);
                         Toast.makeText(getContext(), R.string.ypk_installed, Toast.LENGTH_LONG).show();
                     }
-                    String servername = "";
+                    /*String servername = "";
                     if (getPackageName().equals(BuildConfig.APPLICATION_ID))
                         servername = "23333先行服务器";
                     if (getPackageName().equals((BuildConfig.APPLICATION_ID) + ".KO"))
                         servername = "YGOPRO 사전 게시 중국서버";
                     if (getPackageName().equals((BuildConfig.APPLICATION_ID) + ".EN"))
                         servername = "Mercury23333 OCG/TCG Pre-release";
-                    //AddServer(servername, "s1.ygo233.com", 23333, "Knight of Hanoi");
+                    //AddServer(servername, "s1.ygo233.com", 23333, "Knight of Hanoi");*/
                     btn_download.setVisibility(View.GONE);
                     break;
                 case UnzipUtils.ZIP_UNZIP_EXCEPTION:
@@ -275,6 +277,7 @@ public class WebActivity extends BaseActivity {
             IOUtils.close(outputStream);
         }
     }
+
 
     private void downloadfromWeb() {
         File file = new File(AppsSettings.get().getResourcePath() + ".zip");

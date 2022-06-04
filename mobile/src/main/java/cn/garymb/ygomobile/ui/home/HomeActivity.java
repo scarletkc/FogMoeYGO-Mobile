@@ -1,7 +1,10 @@
 package cn.garymb.ygomobile.ui.home;
 
 import static cn.garymb.ygomobile.Constants.ASSET_SERVER_LIST;
+import static cn.garymb.ygomobile.utils.DownloadUtil.TYPE_DOWNLOAD_EXCEPTION;
 
+import android.content.ContextWrapper;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -12,6 +15,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.util.SparseArray;
 import android.view.Gravity;
@@ -29,7 +33,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -47,6 +53,7 @@ import com.ourygo.assistant.base.listener.OnDuelAssistantListener;
 import com.ourygo.assistant.util.DuelAssistantManagement;
 import com.ourygo.assistant.util.Util;
 import com.tencent.bugly.beta.Beta;
+import com.tencent.smtt.sdk.DownloadListener;
 import com.tencent.smtt.sdk.QbSdk;
 import com.tubb.smrv.SwipeMenuRecyclerView;
 
@@ -86,8 +93,12 @@ import cn.garymb.ygomobile.ui.plus.VUiKit;
 import cn.garymb.ygomobile.ui.preference.SettingsActivity;
 import cn.garymb.ygomobile.ui.widget.Shimmer;
 import cn.garymb.ygomobile.ui.widget.ShimmerTextView;
+import cn.garymb.ygomobile.utils.DownloadUtil;
 import cn.garymb.ygomobile.utils.FileLogUtil;
+import cn.garymb.ygomobile.utils.FileUtils;
 import cn.garymb.ygomobile.utils.ScreenUtil;
+import cn.garymb.ygomobile.utils.UnzipUtils;
+import cn.garymb.ygomobile.utils.YGODialogUtil;
 import cn.garymb.ygomobile.utils.YGOUtil;
 import ocgcore.CardManager;
 import ocgcore.DataManager;
@@ -148,8 +159,9 @@ public abstract class HomeActivity extends BaseActivity implements OnDuelAssista
         }
         //初始化决斗助手
         initDuelAssistant();
-        //萌卡
-        //StartMycard();
+        //萌卡 FogMoe
+        StartMycard();
+
         checkNotch();
         showNewbieGuide("homePage");
     }
@@ -534,19 +546,76 @@ public abstract class HomeActivity extends BaseActivity implements OnDuelAssista
         }
     }
 
+    public void FogMoeUpdateCheck(){
+        WebActivity webActivity = new WebActivity();
+        File file = new File(AppsSettings.get().getResourcePath() + "FogMoe-Temp-YGO.zip");
+        if (file.exists()) {
+            FileUtils.deleteFile(file);
+        }
+        AlertDialog.Builder builder=new AlertDialog.Builder(this);
+        builder
+                .setTitle("下载")
+                .setMessage("是否更新？（如果是第一次运行请先点击更新下载，否则没有卡片数据）")
+                .setPositiveButton("更新", (dialog, which) -> {
+                    String ygocorePath = AppsSettings.get().getResourcePath();
+                    DownloadUtil.get().download("https://ygodiydata.github.fogmoe.top/",ygocorePath,"FogMoe-Temp-YGO.zip", new DownloadUtil.OnDownloadListener() {
+                        @Override
+                        public void onDownloadSuccess(File file1) {
+                            Message message = new Message();
+                            message.what = UnzipUtils.ZIP_READY;
+                            try {
+                                UnzipUtils.upZipFile(file1, AppsSettings.get().getResourcePath()+"/expansions");
+                                FileUtils.copyDir(AppsSettings.get().getResourcePath()+"/expansions/ygopro-FogMoe-card-database-main",AppsSettings.get().getResourcePath()+"/expansions",true);
+                                FileUtils.delFile(AppsSettings.get().getResourcePath()+"/expansions/ygopro-FogMoe-card-database-main");
+                            } catch (Exception e) {
+                                message.what = UnzipUtils.ZIP_UNZIP_EXCEPTION;
+                            } finally {
+                                message.what = UnzipUtils.ZIP_UNZIP_OK;
+                            }
+
+                            //webActivity.handler.sendMessage(message);
+                        }
+
+
+                        @Override
+                        public void onDownloading(int progress) {
+                            Message message = new Message();
+                            message.what = DownloadUtil.TYPE_DOWNLOAD_ING;
+                            message.arg1 = progress;
+                            //webActivity.handler.sendMessage(message);
+
+
+                        }
+
+                        @Override
+                        public void onDownloadFailed(Exception e) {
+                            //下载失败后删除下载的文件
+                            FileUtils.deleteFile(file);
+//                downloadCardImage(code, file);
+                            Message message = new Message();
+                            message.what = TYPE_DOWNLOAD_EXCEPTION;
+                            message.obj = e.toString();
+                            //webActivity.handler.sendMessage(message);
+                        }
+                    });
+                    String[] str ={"正在下载卡片数据，请不要关闭程序，稍后会自动完成。"};
+                    YGODialogUtil.dialogl(this,"正在下载卡片数据，请不要关闭程序，稍后会自动完成。",str);
+                })
+                .setNegativeButton("不更新", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+        AlertDialog alertDialog=builder.create();
+        alertDialog.show();
+
+    }
+
     public void StartMycard() {
+        WebActivity webActivity = new WebActivity();
         ImageView iv_mc = $(R.id.btn_mycard);
         iv_mc.setOnClickListener((v) -> {
-            if (Constants.SHOW_MYCARD) {
-                startActivity(new Intent(this, MyCardActivity.class));
-            }
-        });
-        iv_mc.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                startActivity(new Intent(HomeActivity.this, FileLogActivity.class));
-                return true;
-            }
+            FogMoeUpdateCheck();
         });
     }
 
@@ -661,6 +730,10 @@ public abstract class HomeActivity extends BaseActivity implements OnDuelAssista
             dialog.dismiss();
         });
     }
+
+
+
+
 
     public void setRandomCardDetail() {
         //加载数据库中所有卡片卡片
