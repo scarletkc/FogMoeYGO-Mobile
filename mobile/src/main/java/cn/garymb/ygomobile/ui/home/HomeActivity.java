@@ -567,6 +567,9 @@ public abstract class HomeActivity extends BaseActivity implements OnDuelAssista
                                 UnzipUtils.upZipFile(file1, AppsSettings.get().getResourcePath()+"/expansions");
                                 FileUtils.copyDir(AppsSettings.get().getResourcePath()+"/expansions/ygopro-FogMoe-card-database-main",AppsSettings.get().getResourcePath()+"/expansions",true);
                                 FileUtils.delFile(AppsSettings.get().getResourcePath()+"/expansions/ygopro-FogMoe-card-database-main");
+                                FileUtils.delFile(AppsSettings.get().getResourcePath()+"/expansions/ygopro-FogMoe-card-database-main/script");
+                                FileUtils.delFile(AppsSettings.get().getResourcePath()+"/expansions/ygopro-FogMoe-card-database-main/pics");
+                                FileUtils.delFile(AppsSettings.get().getResourcePath()+"/expansions/ygopro-FogMoe-card-database-main/pics/field");
                             } catch (Exception e) {
                                 message.what = UnzipUtils.ZIP_UNZIP_EXCEPTION;
                             } finally {
