@@ -89,7 +89,7 @@ public class WebActivity extends BaseActivity {
                         servername = "YGOPRO 사전 게시 중국서버";
                     if (getPackageName().equals((BuildConfig.APPLICATION_ID) + ".EN"))
                         servername = "Mercury23333 OCG/TCG Pre-release";
-                    AddServer(servername, "s1.ygo233.com", 23333, "Knight of Hanoi");
+                    //AddServer(servername, "s1.ygo233.com", 23333, "Knight of Hanoi");
                     btn_download.setVisibility(View.GONE);
                     break;
                 case UnzipUtils.ZIP_UNZIP_EXCEPTION:
@@ -125,11 +125,11 @@ public class WebActivity extends BaseActivity {
         });*/
         if (doIntent(getIntent())) {
             mWebViewPlus.loadUrl(mUrl);
-            if (mUrl.equals(URL_YGO233_ADVANCE)) {
+            /*if (mUrl.equals(URL_YGO233_ADVANCE)) {
                 btn_download.setVisibility(View.VISIBLE);
             } else {
                 btn_download.setVisibility(View.GONE);
-            }
+            }*/
         }
     }
 

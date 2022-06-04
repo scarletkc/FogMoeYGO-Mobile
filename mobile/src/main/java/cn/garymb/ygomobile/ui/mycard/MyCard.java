@@ -36,12 +36,12 @@ import static junit.framework.Assert.assertEquals;
 
 public class MyCard {
 
-    private static final String mHomeUrl = "https://mycard.moe/mobile/";
-    private static final String mArenaUrl = "https://mycard.moe/ygopro/arena/";
-    private static final String mCommunityUrl = "https://ygobbs.com/login";
-    private static final String return_sso_url = "https://mycard.moe/mobile/?";
-    private static final String HOST_MC = "mycard.moe";
-    private static final String MC_MAIN_URL = "https://mycard.moe/mobile/ygopro/lobby";
+    private static final String mHomeUrl = "https://diy.fog.moe/";
+    private static final String mArenaUrl = "https://diy.fog.moe/";
+    private static final String mCommunityUrl = "https://diy.fog.moe/";
+    private static final String return_sso_url = "https://diy.fog.moe/";
+    private static final String HOST_MC = "ygo.fog.moe";
+    private static final String MC_MAIN_URL = "https://diy.fog.moe/";
     private static final Charset UTF_8 = Charset.forName("UTF-8");
     private final DefWebViewClient mDefWebViewClient;
     private final User mUser = new User();

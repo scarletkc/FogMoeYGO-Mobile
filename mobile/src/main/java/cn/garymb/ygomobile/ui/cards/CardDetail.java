@@ -428,7 +428,7 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
         imageLoader.bindImage(photoView, code, null, ImageLoader.Type.middle);
 
         if (null == ImageLoader.getImageFile(code)) {
-            downloadCardImage(code, false);
+            //downloadCardImage(code, false);
         }
 
     }

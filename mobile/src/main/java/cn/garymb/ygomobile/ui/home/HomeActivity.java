@@ -149,7 +149,7 @@ public abstract class HomeActivity extends BaseActivity implements OnDuelAssista
         //初始化决斗助手
         initDuelAssistant();
         //萌卡
-        StartMycard();
+        //StartMycard();
         checkNotch();
         showNewbieGuide("homePage");
     }
@@ -333,7 +333,7 @@ public abstract class HomeActivity extends BaseActivity implements OnDuelAssista
                 DeckManagerActivity.start(this, null);
                 break;
             case R.id.action_join_qq_group:
-                String key = "anEjPCDdhLgxtfLre-nT52G1Coye3LkK";
+                String key = "";
                 joinQQGroup(key);
                 break;
             case R.id.action_help: {
@@ -563,7 +563,7 @@ public abstract class HomeActivity extends BaseActivity implements OnDuelAssista
 
     public boolean joinQQGroup(String key) {
         Intent intent = new Intent();
-        intent.setData(Uri.parse("mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26k%3D" + key));
+        intent.setData(Uri.parse("https://jq.qq.com/?_wv=1027&k=RVS2wPU4"));
         // 此Flag可根据具体产品需要自定义，如设置，则在加群界面按返回，返回手Q主界面，不设置，按返回会返回到呼起产品界面    //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         try {
             startActivity(intent);

@@ -12,7 +12,7 @@
             android:name="cn.garymb.ygomobile.YGOMobileActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="true"
-            android:label="YGOMobile"
+            android:label="YGOMobile FogMoeDIY"
             android:process=":game"
             android:launchMode="singleTop"
             android:screenOrientation="sensorLandscape"

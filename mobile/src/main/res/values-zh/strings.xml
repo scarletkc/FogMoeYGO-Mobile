@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="StringFormatInvalid">
-    <string name="app_name">YGOMobile-FogMoeDIY</string>
+    <string name="app_name">YGOMobile FogMoeDIY</string>
     <string name="action_settings">设置</string>
     <string name="action_game">单人游戏</string>
     <string name="action_about">关于</string>
@@ -28,7 +28,7 @@
     <string name="bg_menu">菜单背景</string>
     <string name="bg_deck">卡组背景</string>
     <string name="action_add_server">添加服务器</string>
-    <string name="action_download_expansions">拓展卡下载</string>
+    <string name="action_download_expansions">FogMoe</string>
     <string name="no_find_file_selectotr">没有找到文件选择器</string>
     <string name="no_find_image_selector">没有找到图片选择器</string>
     <string name="no_find_image_cutor">没有找到裁剪工具</string>
@@ -48,7 +48,7 @@
     <string name="settings_game_font_antialias_summary">禁用字体抗锯齿可以提升帧数</string>
     <string name="settings_about_author_pref">作者</string>
     <string name="settings_about_version_pref">版本</string>
-    <string name="settings_about_check_update">检查更新</string>
+    <string name="settings_about_check_update">FogMoe</string>
     <string name="settings_about_change_log">更新日志</string>
     <string name="settings_game_card_quality">游戏图片质量</string>
     <string name="settings_game_font_name">游戏字体</string>
@@ -165,7 +165,7 @@
     <string name="settings_game_sensor_refresh">摇一摇刷新界面</string>
     <string name="label_pendulum">灵摆刻度</string>
     <string name="all">全卡表</string>
-    <string name="donation">爱发电</string>
+    <string name="donation">FogMoe</string>
     <string name="refresh">刷新</string>
     <string name="select_deck">点击选择卡组</string>
     <string name="quit_deck_tip">退出卡组编辑?</string>
@@ -195,7 +195,7 @@
     <string name="tip_istunning">游戏已运行</string>
     <string name="edit">编辑</string>
     <string name="delete">删除</string>
-    <string name="mycard">萌卡平台</string>
+    <string name="mycard">FogMoe</string>
     <string name="arena">决斗数据库</string>
     <string name="mc_chat">聊天室</string>
     <string name="noting_to_send">发送内容不能为空</string>
@@ -230,7 +230,7 @@
     <string name="OpenTIP">快捷加房使用方法</string>
     <string name="Open_Alert_Window">去打开悬浮窗</string>
     <string name="Function_Menu">功能菜单</string>
-    <string name="Join_QQ">机型调试群</string>
+    <string name="Join_QQ">FogMoe</string>
     <string name="donatefor">您的捐赠将用于维持自动更新费用，收集更新资料、修图后期以及购买适配机型等</string>
     <string name="coverSelect">点击相应卡背选择文件</string>
     <string name="bgSelect">点击相应背景选择文件</string>
