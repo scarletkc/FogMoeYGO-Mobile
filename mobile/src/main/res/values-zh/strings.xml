@@ -114,7 +114,7 @@
     <string name="label_category">效果分类</string>
     <string name="linkmarker">◀连接标记▶</string>>
     <string name="searching">读取中</string>
-    <string name="card_faq">在线调整</string>
+    <string name="card_faq">FogMoe</string>
     <string name="no_webbrowser">没有安装浏览器</string>
     <string name="load_game">启动游戏中</string>
 
@@ -158,7 +158,7 @@
     <string name="screenshoot">图片分享</string>
     <string name="ydk_share">文件分享</string>
     <string name="no_share_app">没有找到分享应用</string>
-    <string name="intput_room_name">输入密码（可不填）</string>
+    <string name="intput_room_name">输入密码（必须）</string>
     <string name="join">加入</string>
     <string name="quick_join">加入房间</string>
     <string name="join_game">进入游戏</string>
