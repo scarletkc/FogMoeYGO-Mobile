@@ -1,8 +1,12 @@
 package cn.garymb.ygomobile.ui.home;
 
+
 import static cn.garymb.ygomobile.Constants.ASSET_SERVER_LIST;
 import static cn.garymb.ygomobile.utils.DownloadUtil.TYPE_DOWNLOAD_EXCEPTION;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,6 +19,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.SparseArray;
@@ -35,7 +40,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.NotificationCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -69,6 +76,7 @@ import java.util.List;
 import cn.garymb.ygodata.YGOGameOptions;
 import cn.garymb.ygomobile.AppsSettings;
 import cn.garymb.ygomobile.Constants;
+import cn.garymb.ygomobile.YGOMobileActivity;
 import cn.garymb.ygomobile.YGOStarter;
 import cn.garymb.ygomobile.bean.Deck;
 import cn.garymb.ygomobile.bean.ServerInfo;
@@ -559,6 +567,7 @@ public abstract class HomeActivity extends BaseActivity implements OnDuelAssista
                 .setPositiveButton("更新", (dialog, which) -> {
                     String ygocorePath = AppsSettings.get().getResourcePath();
                     DownloadUtil.get().download("https://ygodiydata.github.fogmoe.top/",ygocorePath,"FogMoe-Temp-YGO.zip", new DownloadUtil.OnDownloadListener() {
+                        @RequiresApi(api = Build.VERSION_CODES.O)
                         @Override
                         public void onDownloadSuccess(File file1) {
                             Message message = new Message();
@@ -573,6 +582,20 @@ public abstract class HomeActivity extends BaseActivity implements OnDuelAssista
                             } catch (Exception e) {
                                 message.what = UnzipUtils.ZIP_UNZIP_EXCEPTION;
                             } finally {
+                                Looper.prepare();
+                                NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                                NotificationChannel channel=new NotificationChannel("YGOMobile FogMoeDIY","卡片数据已完成更新下载，请重启App",
+                                        NotificationManager.IMPORTANCE_HIGH);
+                                manager.createNotificationChannel(channel);
+                                Notification note = new NotificationCompat.Builder(getApplicationContext(), "YGOMobile FogMoeDIY")
+                                        .setContentTitle("YGOMobile FogMoeDIY")
+                                        .setContentText("卡片数据已完成更新下载，请重启App")
+                                        .setSmallIcon(R.drawable.ic_note)
+                                        .setAutoCancel(true)
+                                        .build();
+                                Toast.makeText(getApplicationContext(), "卡片数据已完成更新下载，请重启App", Toast.LENGTH_LONG).show();
+                                manager.notify(1,note);
+                                Looper.loop();
                                 message.what = UnzipUtils.ZIP_UNZIP_OK;
                             }
 
@@ -601,8 +624,8 @@ public abstract class HomeActivity extends BaseActivity implements OnDuelAssista
                             //webActivity.handler.sendMessage(message);
                         }
                     });
-                    String[] str ={"正在下载卡片数据，请不要关闭程序，稍后会自动完成。"};
-                    YGODialogUtil.dialogl(this,"正在下载卡片数据，请不要关闭程序，稍后会自动完成。",str);
+                    String[] str ={"正在下载卡片数据，请不要关闭程序，稍后会自动完成并弹出通知提示。"};
+                    YGODialogUtil.dialogl(this,"正在下载卡片数据，请不要关闭程序，稍后会自动完成并弹出通知提示。",str);
                 })
                 .setNegativeButton("不更新", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
