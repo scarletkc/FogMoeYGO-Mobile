@@ -574,26 +574,28 @@ public abstract class HomeActivity extends BaseActivity implements OnDuelAssista
                             message.what = UnzipUtils.ZIP_READY;
                             try {
                                 UnzipUtils.upZipFile(file1, AppsSettings.get().getResourcePath()+"/expansions");
-                                FileUtils.copyDir(AppsSettings.get().getResourcePath()+"/expansions/ygopro-FogMoe-card-database-main",AppsSettings.get().getResourcePath()+"/expansions",true);
-                                FileUtils.delFile(AppsSettings.get().getResourcePath()+"/expansions/ygopro-FogMoe-card-database-main");
-                                FileUtils.delFile(AppsSettings.get().getResourcePath()+"/expansions/ygopro-FogMoe-card-database-main/script");
-                                FileUtils.delFile(AppsSettings.get().getResourcePath()+"/expansions/ygopro-FogMoe-card-database-main/pics");
-                                FileUtils.delFile(AppsSettings.get().getResourcePath()+"/expansions/ygopro-FogMoe-card-database-main/pics/field");
+                                FileUtils.copyDir(AppsSettings.get().getResourcePath()+"/expansions/FogMoeYGO-Card-Database-main",AppsSettings.get().getResourcePath()+"/expansions",true);
+                                FileUtils.delFile(AppsSettings.get().getResourcePath()+"/expansions/FogMoeYGO-Card-Database-main");
+                                FileUtils.delFile(AppsSettings.get().getResourcePath()+"/expansions/FogMoeYGO-Card-Database-main/script");
+                                FileUtils.delFile(AppsSettings.get().getResourcePath()+"/expansions/FogMoeYGO-Card-Database-main/pics");
+                                FileUtils.delFile(AppsSettings.get().getResourcePath()+"/expansions/FogMoeYGO-Card-Database-main/pics/field");
                             } catch (Exception e) {
                                 message.what = UnzipUtils.ZIP_UNZIP_EXCEPTION;
                             } finally {
                                 Looper.prepare();
                                 NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-                                NotificationChannel channel=new NotificationChannel("YGOMobile FogMoeDIY","卡片数据已完成更新下载，请重启App",
+                                NotificationChannel channel=new NotificationChannel("FogMoeYGO","卡片数据已完成更新下载，请重启App",
                                         NotificationManager.IMPORTANCE_HIGH);
                                 manager.createNotificationChannel(channel);
-                                Notification note = new NotificationCompat.Builder(getApplicationContext(), "YGOMobile FogMoeDIY")
-                                        .setContentTitle("YGOMobile FogMoeDIY")
+                                Notification note = new NotificationCompat.Builder(getApplicationContext(), "FogMoeYGO")
+                                        .setContentTitle("FogMoeYGO")
                                         .setContentText("卡片数据已完成更新下载，请重启App")
-                                        .setSmallIcon(R.drawable.ic_note)
-                                        .setAutoCancel(true)
+                                        .setSmallIcon(R.drawable.ic_launcher3)
+                                        .setPriority(NotificationCompat.PRIORITY_HIGH)
+                                        .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                                         .build();
                                 Toast.makeText(getApplicationContext(), "卡片数据已完成更新下载，请重启App", Toast.LENGTH_LONG).show();
+                                note.flags=Notification.FLAG_INSISTENT|Notification.FLAG_AUTO_CANCEL;
                                 manager.notify(1,note);
                                 Looper.loop();
                                 message.what = UnzipUtils.ZIP_UNZIP_OK;
