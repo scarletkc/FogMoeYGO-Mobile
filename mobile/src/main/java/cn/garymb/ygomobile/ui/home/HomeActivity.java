@@ -22,6 +22,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -67,11 +68,23 @@ import com.tubb.smrv.SwipeMenuRecyclerView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.jivesoftware.smack.Manager;
+import org.w3c.dom.Document;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
+import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import cn.garymb.ygodata.YGOGameOptions;
 import cn.garymb.ygomobile.AppsSettings;
@@ -105,6 +118,7 @@ import cn.garymb.ygomobile.utils.DownloadUtil;
 import cn.garymb.ygomobile.utils.FileLogUtil;
 import cn.garymb.ygomobile.utils.FileUtils;
 import cn.garymb.ygomobile.utils.ScreenUtil;
+import cn.garymb.ygomobile.utils.SystemUtils;
 import cn.garymb.ygomobile.utils.UnzipUtils;
 import cn.garymb.ygomobile.utils.YGODialogUtil;
 import cn.garymb.ygomobile.utils.YGOUtil;
@@ -147,9 +161,9 @@ public abstract class HomeActivity extends BaseActivity implements OnDuelAssista
             public void onViewInitFinished(boolean arg0) {
                 //x5內核初始化完成的回调，为true表示x5内核加载成功，否则表示x5内核加载失败，会自动切换到系统内核。
                 if (arg0) {
-                    Toast.makeText(getActivity(), "加载X5内核成功", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "加载FogMoeYGO成功", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(getActivity(), "加载系统内核成功", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "加载FogMoeYGO成功", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -169,6 +183,7 @@ public abstract class HomeActivity extends BaseActivity implements OnDuelAssista
         initDuelAssistant();
         //萌卡 FogMoe
         StartMycard();
+
 
         checkNotch();
         showNewbieGuide("homePage");
@@ -554,8 +569,12 @@ public abstract class HomeActivity extends BaseActivity implements OnDuelAssista
         }
     }
 
+    public void CheckFogMoeYGOVer(){
+        String[] str1 ={"请更新。"};
+        YGODialogUtil.dialogl(this,"当前FogMoeYGO版本号：["+ SystemUtils.getVersionName(this)+"] 最新FogMoeYGO版本号：["+"]",str1);
+    }
+
     public void FogMoeUpdateCheck(){
-        WebActivity webActivity = new WebActivity();
         File file = new File(AppsSettings.get().getResourcePath() + "FogMoe-Temp-YGO.zip");
         if (file.exists()) {
             FileUtils.deleteFile(file);
@@ -575,6 +594,8 @@ public abstract class HomeActivity extends BaseActivity implements OnDuelAssista
                             try {
                                 UnzipUtils.upZipFile(file1, AppsSettings.get().getResourcePath()+"/expansions");
                                 FileUtils.copyDir(AppsSettings.get().getResourcePath()+"/expansions/FogMoeYGO-Card-Database-main",AppsSettings.get().getResourcePath()+"/expansions",true);
+                                FileUtils.copyDir(AppsSettings.get().getResourcePath()+"/expansions/FogMoeYGO-Card-Database-main/pics",AppsSettings.get().getResourcePath()+"/expansions/pics",true);
+                                FileUtils.copyDir(AppsSettings.get().getResourcePath()+"/expansions/FogMoeYGO-Card-Database-main/script",AppsSettings.get().getResourcePath()+"/expansions/script",true);
                                 FileUtils.delFile(AppsSettings.get().getResourcePath()+"/expansions/FogMoeYGO-Card-Database-main");
                                 FileUtils.delFile(AppsSettings.get().getResourcePath()+"/expansions/FogMoeYGO-Card-Database-main/script");
                                 FileUtils.delFile(AppsSettings.get().getResourcePath()+"/expansions/FogMoeYGO-Card-Database-main/pics");
